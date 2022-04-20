@@ -54,17 +54,17 @@ void *get_in_addr(struct sockaddr *sa) {
 }
 
 //based the code from tirgul 6: mutex.c
-void *THREAD(void* input) {
+void *THREAD(void *input) {
     pthread_mutex_destroy(&lock);
     int *current_fd = (int *) input;
     int new_fd = *current_fd;
 
     //sleep(10);//to show a connection of several threads and not close quickly
 
-    while(true){
+    while (true) {
         char buf[MAXDATASIZE];
         int numbytes;
-        if ((numbytes = recv(new_fd, buf, MAXDATASIZE-1, 0)) == -1) {
+        if ((numbytes = recv(new_fd, buf, MAXDATASIZE - 1, 0)) == -1) {
             perror("recv");
             exit(1);
         }
@@ -76,43 +76,40 @@ void *THREAD(void* input) {
 
         vector<string> texts(begin, end);
         cout << texts[0] << endl;
-        if (texts[0] == "PUSH"/*PUSH <SOMETHING>*/){
+        if (texts[0] == "PUSH"/*PUSH <SOMETHING>*/) {
             string word;
-            for (int i = 1; i < texts.size(); ++i, word += ' ') {word += texts[i];}
+            for (int i = 1; i < texts.size(); ++i, word += ' ') { word += texts[i]; }
             clients_stack.PUSH(word);
-        }
-        else if (texts[0] == "POP"/*POP*/){
-            try{
+        } else if (texts[0] == "POP"/*POP*/) {
+            try {
                 clients_stack.POP();
                 // Good response
-                if(send(new_fd, "1", 1 ,0) == -1){
+                if (send(new_fd, "1", 1, 0) == -1) {
                     perror("send");
                 }
             }
             catch (exception) {
                 // bad response back to user to present error
-                if(send(new_fd, "0", 1 ,0) == -1){
+                if (send(new_fd, "0", 1, 0) == -1) {
                     perror("send");
                 }
             }
-        }
-        else if (texts[0] == "TOP"/*TOP*/){
+        } else if (texts[0] == "TOP"/*TOP*/) {
             try {
                 string last = clients_stack.TOP();
                 cout << last.c_str() << endl;
-                if(send(new_fd, last.c_str(), last.length() ,0) == -1){
+                if (send(new_fd, last.c_str(), last.length(), 0) == -1) {
                     perror("send");
                 }
             }
-            catch (exception){
+            catch (exception) {
                 // bad response back to user to present error
-                if(send(new_fd, "0", 1 ,0) == -1){
+                if (send(new_fd, "0", 1, 0) == -1) {
                     perror("send");
                 }
             }
 
-        }
-        else{
+        } else {
             break;
         }
 
@@ -200,7 +197,7 @@ int main(void) {
 
         inet_ntop(their_addr.ss_family,
                   get_in_addr((struct sockaddr *) &their_addr),
-                          s, sizeof s);
+                  s, sizeof s);
         printf("server: got connection from %s\n", s);
         if (pthread_mutex_init(&lock, NULL) != 0) {
             printf("\n mutex init failed\n");
@@ -210,7 +207,7 @@ int main(void) {
         pthread_t new_thread[10];
         int i = 0;
         //The pthread_create() function is used to create a new thread, with attributes specified by attr, within a process
-        if(pthread_create(&new_thread[i++], NULL, THREAD, &new_fd) != 0){
+        if (pthread_create(&new_thread[i++], NULL, THREAD, &new_fd) != 0) {
             printf("Unable to create thread\n");
         }
         if (i >= BACKLOG) {

@@ -24,17 +24,15 @@
 using namespace std;
 
 // get sockaddr, IPv4 or IPv6:
-void *get_in_addr(struct sockaddr *sa)
-        {
+void *get_in_addr(struct sockaddr *sa) {
     if (sa->sa_family == AF_INET) {
-        return &(((struct sockaddr_in*)sa)->sin_addr);
+        return &(((struct sockaddr_in *) sa)->sin_addr);
     }
 
-    return &(((struct sockaddr_in6*)sa)->sin6_addr);
-        }
+    return &(((struct sockaddr_in6 *) sa)->sin6_addr);
+}
 
-        int main(int argc, char *argv[])
-        {
+int main(int argc, char *argv[]) {
     int sockfd, numbytes;
     char buf[MAXDATASIZE];
     struct addrinfo hints, *servinfo, *p;
@@ -42,7 +40,7 @@ void *get_in_addr(struct sockaddr *sa)
     char s[INET6_ADDRSTRLEN];
 
     if (argc != 2) {
-        fprintf(stderr,"usage: client hostname\n");
+        fprintf(stderr, "usage: client hostname\n");
         exit(1);
     }
 
@@ -56,7 +54,7 @@ void *get_in_addr(struct sockaddr *sa)
     }
 
     // loop through all the results and connect to the first we can
-    for(p = servinfo; p != NULL; p = p->ai_next) {
+    for (p = servinfo; p != NULL; p = p->ai_next) {
         if ((sockfd = socket(p->ai_family, p->ai_socktype,
                              p->ai_protocol)) == -1) {
             perror("client: socket");
@@ -77,13 +75,13 @@ void *get_in_addr(struct sockaddr *sa)
         return 2;
     }
 
-    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
-            s, sizeof s);
+    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *) p->ai_addr),
+              s, sizeof s);
     printf("client: connecting to %s\n", s);
 
     freeaddrinfo(servinfo); // all done with this structure
 
-    while (true){
+    while (true) {
         cout << "Enter command:";
         string input;
         getline(cin, input);
@@ -94,34 +92,34 @@ void *get_in_addr(struct sockaddr *sa)
 
 
         //Send command to server
-        if(send(sockfd, input.c_str(), input.length() ,0) == -1){
+        if (send(sockfd, input.c_str(), input.length(), 0) == -1) {
             perror("send");
         }
 
-        if (texts[0] == "POP"/*TOP*/){
-            if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+        if (texts[0] == "POP"/*TOP*/) {
+            if ((numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0)) == -1) {
                 perror("recv");
                 exit(1);
             }
             buf[numbytes] = '\0';
 
-            if (!strcmp(buf, "0")){
+            if (!strcmp(buf, "0")) {
                 perror("ERROR: Stack is empty, thus cannot pop!");
             }
         }
         // If command is TOP client has to wait for response.
-        if (texts[0] == "TOP"/*TOP*/){
-            if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+        if (texts[0] == "TOP"/*TOP*/) {
+            if ((numbytes = recv(sockfd, buf, MAXDATASIZE - 1, 0)) == -1) {
                 perror("recv");
                 exit(1);
             }
             buf[numbytes] = '\0';
 
-            if (!strcmp(buf, "0")){
+            if (!strcmp(buf, "0")) {
                 perror("ERROR: Stack is empty, thus cannot top!");
                 continue;
             }
-            printf("%s\n",buf);
+            printf("%s\n", buf);
 
         }
     }
