@@ -10,4 +10,5 @@ public:
     string POP();
     void TOP() const;
     bool isEmpty() const;
+    void print_stack();
 };
