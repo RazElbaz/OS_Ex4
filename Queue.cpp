@@ -1,3 +1,18 @@
-//
-// Created by raz on 4/20/22.
-//
+#include "Queue.hpp"
+
+
+void Stack::PUSH(const int &text) {
+    
+}
+
+int Stack::POP() {
+
+}
+
+void Stack::TOP() const {
+
+}
+
+bool Stack::isEmpty() const {
+    return _data.size() == 0;
+}
