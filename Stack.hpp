@@ -1,14 +1,16 @@
+#include <string>
+#include <iostream>
 #include <vector>
 using std::string;
 
 class Stack{
 private:
-    vector<string> _data{};
+    std::vector<string> _data{};
 public:
-    Stack(int capacity);
     void PUSH(const string& text);
     string POP();
-    void TOP() const;
+    string TOP() const;
     bool isEmpty() const;
+    void clear();
     void print_stack();
 };
