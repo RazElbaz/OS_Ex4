@@ -1,5 +1,6 @@
 #include <string.h>
 #include <iostream>
+#include "allocator.hpp"
 
 #define MAX_TEXT_SIZE 1024 //BYTES
 

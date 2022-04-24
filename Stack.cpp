@@ -1,8 +1,8 @@
 #include "Stack.hpp"
-
+#include "allocator.hpp"
 
 Stack* create(){
-    Stack *stack = (Stack*)malloc(sizeof(Stack));
+    Stack *stack = (Stack*)myMalloc(sizeof(Stack));
     if (!stack){
         return NULL;
     }
@@ -12,7 +12,7 @@ Stack* create(){
 }
 
 void PUSH(Stack* stack, const char* text){
-    node_ptr n = (node_ptr)malloc(sizeof(node));
+    node_ptr n = (node_ptr)myMalloc(sizeof(node));
     if (!n){
         return;
     }
@@ -35,7 +35,7 @@ char* POP(Stack* stack, int *err_flag) {
 
     node_ptr head_next = stack->head->next;
     stack->head = head_next;
-    free(rm_node);
+    myFree(rm_node);
     stack->size--;
     return rm_text;
 }
@@ -43,7 +43,6 @@ char* POP(Stack* stack, int *err_flag) {
 char* TOP(Stack* stack, int *err_flag) {
     if (isEmpty(stack)) {
         *err_flag = true;
-        //fprintf(stderr, "ERROR: Stack is empty, thus cannot top!");
         return NULL;
     }
     return stack->head->data;
@@ -65,6 +64,6 @@ void clear(Stack* stack) {
     while (last){
         node_ptr tmp = last;
         last = last->next;
-        free(tmp);
+        myFree(tmp);
     }
 }
