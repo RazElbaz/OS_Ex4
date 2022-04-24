@@ -17,9 +17,11 @@
 #include <vector>
 #include <arpa/inet.h>
 
+#include "Stack.hpp"
+
 #define PORT "3490" // the port client will be connecting to
 
-#define MAXDATASIZE 1024 // max number of bytes we can get at once, by assignment's instructions
+
 
 using namespace std;
 
@@ -36,7 +38,7 @@ void *get_in_addr(struct sockaddr *sa)
         int main(int argc, char *argv[])
         {
     int sockfd, numbytes;
-    char buf[MAXDATASIZE];
+    char buf[MAX_TEXT_SIZE];
     struct addrinfo hints, *servinfo, *p;
     int rv;
     char s[INET6_ADDRSTRLEN];
@@ -103,7 +105,7 @@ void *get_in_addr(struct sockaddr *sa)
         }
 
         if (texts[0] == "POP"/*TOP*/){
-            if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+            if ((numbytes = recv(sockfd, buf, MAX_TEXT_SIZE-1, 0)) == -1) {
                 perror("recv");
                 exit(1);
             }
@@ -115,7 +117,7 @@ void *get_in_addr(struct sockaddr *sa)
         }
         // If command is TOP client has to wait for response.
         if (texts[0] == "TOP"/*TOP*/){
-            if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+            if ((numbytes = recv(sockfd, buf, MAX_TEXT_SIZE-1, 0)) == -1) {
                 perror("recv");
                 exit(1);
             }
