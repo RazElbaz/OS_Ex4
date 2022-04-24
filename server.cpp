@@ -22,13 +22,12 @@
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10   // how many pending connections queue will hold
 pthread_mutex_t lock;
-#define MAXDATASIZE 1024 // max number of bytes we can get at once, by assignment's instructions
+
 
 using namespace std;
 using std::string;
 
-
-static Stack clients_stack{}; /*Clients stack */
+static Stack* clients_stack = create(); /*Clients stack */
 
 /*
  * In this task we were based on tirgul number 6
@@ -62,9 +61,10 @@ void *THREAD(void* input) {
     //sleep(10);//to show a connection of several threads and not close quickly
 
     while(true){
-        char buf[MAXDATASIZE];
+        char buf[MAX_TEXT_SIZE];
         int numbytes;
-        if ((numbytes = recv(new_fd, buf, MAXDATASIZE-1, 0)) == -1) {
+        int err_flag = 0;
+        if ((numbytes = recv(new_fd, buf, MAX_TEXT_SIZE-1, 0)) == -1) {
             perror("recv");
             exit(1);
         }
@@ -82,17 +82,18 @@ void *THREAD(void* input) {
         if (texts[0] == "PUSH"/*PUSH <SOMETHING>*/){
             string word;
             for (int i = 1; i < texts.size(); ++i, word += ' ') {word += texts[i];}
-            clients_stack.PUSH(word);
+            PUSH(clients_stack, word.c_str());
+            print_stack(clients_stack);
         }
         else if (texts[0] == "POP"/*POP*/){
-            try{
-                clients_stack.POP();
+            POP(clients_stack, &err_flag);
+            if (!err_flag){
                 // Good response
                 if(send(new_fd, "1", 1 ,0) == -1){
                     perror("send");
                 }
             }
-            catch (exception) {
+            else {
                 // bad response back to user to present error
                 if(send(new_fd, "0", 1 ,0) == -1){
                     perror("send");
@@ -100,14 +101,15 @@ void *THREAD(void* input) {
             }
         }
         else if (texts[0] == "TOP"/*TOP*/){
-            try {
-                string last = clients_stack.TOP();
-                cout << last.c_str() << endl;
-                if(send(new_fd, last.c_str(), last.length() ,0) == -1){
+            char output[9] = "OUTPUT: ";
+            char* top = TOP(clients_stack, &err_flag);
+            char* out = strcat(output, top);
+            if (!err_flag){
+                if(send(new_fd, out, strlen(out),0) == -1){
                     perror("send");
                 }
             }
-            catch (exception){
+            else {
                 // bad response back to user to present error
                 if(send(new_fd, "0", 1 ,0) == -1){
                     perror("send");
