@@ -1,34 +1,70 @@
 #include "Stack.hpp"
-using namespace std;
 
-void Stack::PUSH(const string &text) {
-    _data.push_back(text);
+
+Stack* create(){
+    Stack *stack = (Stack*)malloc(sizeof(Stack));
+    if (!stack){
+        return NULL;
+    }
+    stack->size = 0;
+    stack->head = NULL;
+    return stack;
 }
 
-string Stack::POP() {
-    if (isEmpty()) {throw invalid_argument("ERROR: Stack is empty, thus cannot pop!");}
-    string top = _data[_data.size() - 1];
-    _data.pop_back();
-    return top;
+void PUSH(Stack* stack, const char* text){
+    node_ptr n = (node_ptr)malloc(sizeof(node));
+    if (!n){
+        return;
+    }
+    strcpy(n->data, text);
+    node_ptr next = stack->head;
+    stack->head = n;
+    n->next = next;
+    stack->size++;
 }
 
-string Stack::TOP() const {
-    if (isEmpty()) {throw invalid_argument("ERROR: Stack is empty, thus cannot top!");}
-    return "OUTPUT: " + _data[_data.size() - 1];
+char* POP(Stack* stack, int *err_flag) {
+    if (isEmpty(stack)) {
+        *err_flag = true;
+        //fprintf(stderr, "ERROR: Stack is empty, thus cannot pop!");
+        return NULL;
+    }
+
+    node_ptr rm_node = stack->head;
+    char* rm_text = rm_node->data;
+
+    node_ptr head_next = stack->head->next;
+    stack->head = head_next;
+    free(rm_node);
+    stack->size--;
+    return rm_text;
 }
 
-bool Stack::isEmpty() const {
-    return _data.empty();
+char* TOP(Stack* stack, int *err_flag) {
+    if (isEmpty(stack)) {
+        *err_flag = true;
+        //fprintf(stderr, "ERROR: Stack is empty, thus cannot top!");
+        return NULL;
+    }
+    return stack->head->data;
 }
 
-void Stack::print_stack() {
-    if (isEmpty()) return;
-    for (unsigned int i = _data.size()-1; i >= 0; --i) {
-        cout << _data[i] << endl;
-        if (i == 0) {break;}
+bool isEmpty(Stack* stack) {
+    return stack->size == 0;
+}
+
+void print_stack(Stack* stack) {
+    if (isEmpty(stack)) return;
+    for (node_ptr curr; curr->next; curr = curr->next) {
+        printf("%s\n",curr->data);
     }
 }
-
-void Stack::clear() {
-    _data.clear();
+// Method clears/frees the stack.
+void clear(Stack* stack) {
+    node_ptr last = stack->head;
+    while (last){
+        node_ptr tmp = last;
+        last = last->next;
+        free(tmp);
+    }
 }
