@@ -69,3 +69,18 @@ to have but not required
 5. From another terminal open as many terminals as you want and type in ./client localhost that the user entered is printed on our server
 
 ## Pictures from the run:
+  1. ```PUSH```
+ 
+![alt text]()
+  
+  2. ```TOP```
+ 
+![alt text]()
+  
+  3. ```POP```
+ 
+![alt text]()
+  
+  4. ```Empty stack error```
+ 
+![alt text]()
