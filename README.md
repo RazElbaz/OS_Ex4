@@ -70,9 +70,11 @@ to have but not required
 
 ## Pictures from the run:
   1.```server```
+  
  ![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/server.png)
   
   2.```client```
+  
  ![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/client.png)
   
   3. ```PUSH```
