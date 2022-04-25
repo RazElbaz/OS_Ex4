@@ -69,18 +69,33 @@ to have but not required
 5. From another terminal open as many terminals as you want and type in ./client localhost that the user entered is printed on our server
 
 ## Pictures from the run:
-  1. ```PUSH```
- 
-![alt text]()
+  1.```server```
+ ![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/server.png)
   
-  2. ```TOP```
- 
-![alt text]()
+  2.```client```
+ ![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/client.png)
   
-  3. ```POP```
+  3. ```PUSH```
  
-![alt text]()
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/push.png)
   
-  4. ```Empty stack error```
+  4. ```TOP```
  
-![alt text]()
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/top.png)
+  
+  5. ```POP```
+ 
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/pop.png)
+  
+  6. ```Empty stack error```
+ 
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/stackempty.png)
+  
+  7. ```Test```
+ 
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/Test.png)
+  
+  8. ```multithread```
+ 
+![alt text](https://github.com/RazElbaz/OS_Ex4/blob/main/Pictures%20from%20the%20run/multithread.png)
+  
