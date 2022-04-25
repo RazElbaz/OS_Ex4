@@ -1,18 +1,20 @@
 #!make -f
 CXX=clang++-9
-CXXFLAGS=-std=c++2a
+CXXFLAGS=-std=c++2a -pthread
 
-OBJECTS=Stack.o allocator.o
+OBJECTS=$(subst .cpp,.o,$(SOURCES))
 SOURCES=Stack.cpp allocator.cpp
+
+all: server client
 
 run:
 	./$^
 
-main: main.o $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o main
-
 server: server.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o server -lpthread
+
+test: TestCounter.o Test.o $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o test
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
@@ -21,5 +23,5 @@ tidy:
 	clang-tidy $(SOURCES) -checks=bugprone-*,clang-analyzer-*,cppcoreguidelines-*,performance-*,portability-*,readability-* --warnings-as-errors=* --
 
 clean:
-	rm -f *.o test
+	rm -f *.o test server client
 	rm -f StudentTest*.cpp
