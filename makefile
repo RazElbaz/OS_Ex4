@@ -3,7 +3,7 @@ CXX=clang++-9
 CXXFLAGS=-std=c++2a -pthread
 
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
-SOURCES=Stack.cpp allocator.cpp
+SOURCES=Stack.cpp Deque.cpp allocator.cpp
 
 all: server client
 

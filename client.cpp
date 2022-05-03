@@ -130,6 +130,19 @@ void *get_in_addr(struct sockaddr *sa)
             printf("%s\n",buf);
 
         }
+
+        if (texts[0] == "DEQUEUE"/*TOP*/){
+            if ((numbytes = recv(sockfd, buf, MAX_TEXT_SIZE-1, 0)) == -1) {
+                perror("recv");
+                exit(1);
+            }
+            buf[numbytes] = '\0';
+
+            if (!strcmp(buf, "0")){
+                perror("ERROR: Queue is empty, thus cannot dequeue!");
+            }
+            printf("%s\n",buf);
+        }
     }
     close(sockfd);
     return 0;

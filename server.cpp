@@ -18,6 +18,7 @@
 #include <iterator>
 
 #include "Stack.hpp"
+#include "Deque.hpp"
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10   // how many pending connections queue will hold
@@ -27,7 +28,8 @@ pthread_mutex_t lock;
 using namespace std;
 using std::string;
 
-static Stack* clients_stack = create(); /*Clients stack */
+static Stack* clients_stack = create();         /* Clients stack */
+static Deque* clients_deque = create_deque();   /* Clients deque */
 
 /*
  * In this task we were based on tirgul number 6
@@ -103,6 +105,31 @@ void *THREAD(void* input) {
         else if (texts[0] == "TOP"/*TOP*/){
             char output[9] = "OUTPUT: ";
             char* top = TOP(clients_stack, &err_flag);
+            char* out = strcat(output, top);
+            if (!err_flag){
+                if(send(new_fd, out, strlen(out),0) == -1){
+                    perror("send");
+                }
+            }
+            else {
+                // bad response back to user to present error
+                if(send(new_fd, "0", 1 ,0) == -1){
+                    perror("send");
+                }
+            }
+
+        }
+
+        else if (texts[0] == "ENQUEUE"/*Enqueue <SOMETHING>*/){
+            string word;
+            for (int i = 1; i < texts.size(); ++i, word += ' ') {word += texts[i];}
+            ENQUEUE(clients_deque, word.c_str());
+            print_queue(clients_deque);
+        }
+
+        else if (texts[0] == "DEQUEUE"/*DEQUEUE*/){
+            char output[9] = "OUTPUT: ";
+            char* top = DEQUEUE_TAIL(clients_deque, &err_flag);
             char* out = strcat(output, top);
             if (!err_flag){
                 if(send(new_fd, out, strlen(out),0) == -1){
